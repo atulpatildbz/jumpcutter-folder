@@ -28,8 +28,13 @@ def copyFrame(inputFrame,outputFrame):
         print(str(outputFrame+1)+" time-altered frames saved.")
     return True
 def inputToOutputFilename(filename):
+    print('input filename is: ' + filename)
+    slashIndex = filename.rfind("/")
+    filename = filename[slashIndex+1:]
+    print('after slash filename: ' + filename)
     dotIndex = filename.rfind(".")
-    return filename[:dotIndex]+"_ALTERED"+filename[dotIndex:]
+    print('usme dotIndex' + str(dotIndex))
+    return "\""+filename[:dotIndex]+"_ALTERED"+filename[dotIndex:]+"\""
 def createPath(s):
     try:  
         os.mkdir(s)
@@ -77,26 +82,26 @@ else:
 custom=input("Enter C for custom values, else hit enter").upper()
 if custom=="C":
 	frameRate = input("Enter frame rate. Leave blank for default.\n")
-	if frameRate is None:
+	if frameRate is None or frameRate=='':
 		frameRate=30
 	SAMPLE_RATE = input("Enter sample rate. Leave blank for default.\n")
-	if SAMPLE_RATE is None:
+	if SAMPLE_RATE is None or SAMPLE_RATE=='':
 		SAMPLE_RATE=44100
 	SILENT_THRESHOLD = input("Enter silent threshold. The volume amount that frames' audio needs to surpass to be consider \"sounded\". It ranges from 0 (silence) to 1 (max volume). Leave blank for default.\n")
-	if SILENT_THRESHOLD is None:
+	if SILENT_THRESHOLD is None or SILENT_THRESHOLD=='':
 		SILENT_THRESHOLD=0.03
 	FRAME_SPREADAGE = input("Enter silent threshold. Leave blank for default.\n")
-	if FRAME_SPREADAGE is None:
+	if FRAME_SPREADAGE is None or FRAME_SPREADAGE=='':
 		FRAME_SPREADAGE=1
 	silent_speed=input("Enter silent speed. Leave blank for default.\n")
-	if silent_speed is None:
+	if silent_speed is None or silent_speed=='':
 		silent_speed=99999
 	sounded_speed=input("Enter sounded speed. The speed that sounded (spoken) frames should be played at. Typically 1. Leave blank for default.\n")
-	if sounded_speed is None:
+	if sounded_speed is None or sounded_speed=='':
 		sounded_speed=1
 	NEW_SPEED = [silent_speed, sounded_speed]
 	FRAME_QUALITY = input("Enter frame quality. Leave blank for default.\n")
-	if FRAME_QUALITY is None:
+	if FRAME_QUALITY is None or FRAME_QUALITY=='':
 		FRAME_QUALITY=2
 else:
 	frameRate = args.frame_rate
@@ -121,9 +126,9 @@ else:
 TEMP_FOLDER = "TEMP"
 AUDIO_FADE_ENVELOPE_SIZE = 400
 createPath(TEMP_FOLDER)
-command = "ffmpeg -i "+INPUT_FILE+" -qscale:v "+str(FRAME_QUALITY)+" "+TEMP_FOLDER+"/frame%06d.jpg -hide_banner"
+command = "ffmpeg -i \""+INPUT_FILE+"\" -qscale:v "+str(FRAME_QUALITY)+" "+TEMP_FOLDER+"/frame%06d.jpg -hide_banner"
 subprocess.call(command, shell=True)
-command = "ffmpeg -i "+INPUT_FILE+" -ab 160k -ac 2 -ar "+str(SAMPLE_RATE)+" -vn "+TEMP_FOLDER+"/audio.wav"
+command = "ffmpeg -i \""+INPUT_FILE+"\" -ab 160k -ac 2 -ar "+str(SAMPLE_RATE)+" -vn "+TEMP_FOLDER+"/audio.wav"
 subprocess.call(command, shell=True)
 command = "ffmpeg -i "+TEMP_FOLDER+"/input.mp4 2>&1"
 f = open(TEMP_FOLDER+"/params.txt", "w")
