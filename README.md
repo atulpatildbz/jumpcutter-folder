@@ -1,7 +1,2 @@
-# PyJumpcutterV2
-carykh's but with improvements and a GUI!
-
-
-
-Wanna say thanks? It's free, and brightens up my day :)    
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/ThatOneCalculator)
+# PyJumpcutterV2 for Folder input
+carykh's original, improved by mikkovedru and added folder input option.
