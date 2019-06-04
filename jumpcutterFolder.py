@@ -31,7 +31,7 @@ def inputToOutputFilename(filename):
     slashIndex = filename.rfind("/")
     filename = filename[slashIndex+1:]
     dotIndex = filename.rfind(".")
-    return "\""+filename[:dotIndex]+"_ALTERED"+filename[dotIndex:]+"\""
+    return filename[:dotIndex]+"_ALTERED"+filename[dotIndex:]
 def createPath(s):
     try:  
         os.mkdir(s)
@@ -61,6 +61,8 @@ root.wm_state("iconic") #gets rid of the stupid window
 # root.filename =  filedialog.askopenfilename(initialdir = "/Desktop",title = "Select video file", filetypes = (("All files","*.*"),("MP4","*.mp4*")))
 root.folderName = filedialog.askdirectory()
 allListOfVideoFiles = os.listdir(root.folderName)
+OUTPUT_Folder = root.folderName.split("/")[-1] + "_altered"
+createPath(OUTPUT_Folder)
 listOfVideoFiles = []
 for file in allListOfVideoFiles:
     if ".mp4" in file:
@@ -185,6 +187,7 @@ for file in listOfVideoFiles:
                 copyFrame(lastExistingFrame,outputFrame)
         outputPointer = endPointer
     wavfile.write(TEMP_FOLDER+"/audioNew.wav",SAMPLE_RATE,outputAudioData)
-    command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -strict -2 "+OUTPUT_FILE
+    command = "ffmpeg -framerate "+str(frameRate)+" -i "+TEMP_FOLDER+"/newFrame%06d.jpg -i "+TEMP_FOLDER+"/audioNew.wav -strict -2 \""+OUTPUT_Folder+"/"+OUTPUT_FILE+"\""
+    print("****************the command is:" + command)
     subprocess.call(command, shell=True)
     deletePath(TEMP_FOLDER)
